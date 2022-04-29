@@ -1,0 +1,1 @@
+rm -rfd SkyblockClient-REPO

@@ -17,11 +17,11 @@ export default class say extends BotCommand {
 	}
 	async exec(message, args) {
 		await message.channel.send(args.thingtosay)
-        await message.delete()
+		await message.delete()
 	}
 
-    async execSlash(message, args) {
-        await message.channel.send(args.thingtosay)
-        await message.reply({content: 'i sent the message probably', ephemeral: true})
-    }
+	async execSlash(message, args) {
+		await message.channel.send(args.thingtosay)
+		await message.reply({ content: 'i sent the message probably', ephemeral: true })
+	}
 }

@@ -16,28 +16,21 @@ export default class GeneralRenamer extends BotListener {
 		return string
 			.split('')
 			.filter(function (item, pos, self) {
-				return self.indexOf(item) == pos;
+				return self.indexOf(item) == pos
 			})
-			.join('');
+			.join('')
 	}
 
 	async exec(message: Message) {
-		const blacklist = [
-			"suport", "general",
-			"@here", "@everyone",
-			"sex", "cock", "penis",
-			"niger", "niga"
-		]
+		const blacklist = ['suport', 'general', '@here', '@everyone', 'sex', 'cock', 'penis', 'niger', 'niga']
 		try {
 			const nospacecontent = message.content.replaceAll(' ', '')
 
 			if (message.channel.id == '780181693553704973') {
 				if (nospacecontent.length >= 7 || nospacecontent.length <= 1) return
-			}
-			else if (message.channel.id == '887818760126345246') {
+			} else if (message.channel.id == '887818760126345246') {
 				if (nospacecontent.length >= 15 || nospacecontent.length <= 5) return
-			}
-			else {
+			} else {
 				return
 			}
 			if (message.webhookId) return
@@ -49,7 +42,7 @@ export default class GeneralRenamer extends BotListener {
 			const cleanmessage = this.removeDuplicateCharacters(nospacecontent.toLowerCase().replaceAll('0', 'o'))
 			for (const word of blacklist) {
 				if (cleanmessage.includes(word)) {
-					return;
+					return
 				}
 			}
 			//const noping = new MessageMentions(false)

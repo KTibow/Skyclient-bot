@@ -58,7 +58,6 @@ export default class Evaluate extends BotCommand {
 		let output
 
 		try {
-			
 			let codeToEval = `(async () => {${args.codetoeval}})()`
 			if (!args.codetoeval.includes('await') && !args.codetoeval.includes('return')) codeToEval = args.codetoeval
 			if (args.codetoeval.includes('await') && !args.codetoeval.includes('return')) codeToEval = `(async () => { return ${args.codetoeval}})()`

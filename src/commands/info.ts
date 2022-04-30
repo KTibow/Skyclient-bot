@@ -22,6 +22,6 @@ export default class info extends BotCommand {
 	}
 
 	async exec(message, args) {
-		await msgutils.reply(message, {content: 'hi this command isn\'t done yet\n\nfor now join https://inv.wtf/katherine'}, args.ephemeral)
+		await msgutils.reply(message, { content: "hi this command isn't done yet\n\nfor now join https://inv.wtf/katherine" }, args.ephemeral)
 	}
 }

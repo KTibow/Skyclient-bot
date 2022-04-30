@@ -16,7 +16,7 @@ interface hastebinRes {
 const slashGuilds = ['780181693100982273', '794610828317032458']
 
 const SkyClientGuilds = [
-	`780181693100982273` //main server
+	`780181693100982273`, //main server
 ]
 
 //this next function is taken from bush bot (https://github.com/NotEnoughUpdates/bush-bot), the repo is private so if you get a 404 then deal with it, removed a thing from the line under these comments because it didn't seem to be doing anything
@@ -172,7 +172,7 @@ async function getPronouns(user: User, context: string) {
 
 	try {
 		const pronoundb = await got.get(`https://pronoundb.org/api/v1/lookup?platform=discord&id=${user.id}`)
-		const pronouns = (JSON.parse(pronoundb.body)).pronouns
+		const pronouns = JSON.parse(pronoundb.body).pronouns
 
 		//what to return, based on what's getting someone's pronouns
 		if (context == `details`) {
@@ -334,9 +334,7 @@ function parseInteractionArgs(interaction: CommandInteraction) {
 				options[option.name] = option.role
 				break
 			case 'MENTIONABLE':
-				options[option.name] = option.role
-					? option.role
-					: { user: option.user, member: option.member }
+				options[option.name] = option.role ? option.role : { user: option.user, member: option.member }
 				break
 			case 'SUB_COMMAND':
 				options['subcommand'] = option.name
@@ -367,9 +365,7 @@ function parseInteractionArgs(interaction: CommandInteraction) {
 							options[subOption.name] = subOption.role
 							break
 						case 'MENTIONABLE':
-							options[subOption.name] = subOption.role
-								? subOption.role
-								: { user: subOption.user, member: subOption.member }
+							options[subOption.name] = subOption.role ? subOption.role : { user: subOption.user, member: subOption.member }
 							break
 					}
 				})
@@ -380,9 +376,7 @@ function parseInteractionArgs(interaction: CommandInteraction) {
 				// @ts-ignore
 				const suboptions = option.options[0].options
 
-				options['subcommand'] = (
-					option.options as { name: string; type: string }[]
-				)[0].name
+				options['subcommand'] = (option.options as { name: string; type: string }[])[0].name
 
 				// @ts-ignore
 				suboptions.forEach((subOption) => {
@@ -412,9 +406,7 @@ function parseInteractionArgs(interaction: CommandInteraction) {
 							options[subOption.name] = subOption.role
 							break
 						case 'MENTIONABLE':
-							options[subOption.name] = subOption.role
-								? subOption.role
-								: { user: subOption.user, member: subOption.member }
+							options[subOption.name] = subOption.role ? subOption.role : { user: subOption.user, member: subOption.member }
 							break
 					}
 				})
@@ -445,5 +437,5 @@ export = {
 	censorString,
 	fetchUser,
 	getLinksFromString,
-	parseInteractionArgs
+	parseInteractionArgs,
 }

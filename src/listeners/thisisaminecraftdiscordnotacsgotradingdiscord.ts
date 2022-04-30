@@ -22,7 +22,6 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		if (message.member.roles.cache.has('885960137544695819')) return
 		if (message.member.permissions.toArray().includes('ADMINISTRATOR')) return
 
-
 		const links = utils.getLinksFromString(message.content)
 
 		// links.forEach(async (l) => {
@@ -57,36 +56,19 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		// nacrt wrote this little bit
 		// no i didn't?
 		// yes you did dumbass
-		
-		if (((links.size > 0 || message.content.toLowerCase().includes("discord.gg/")) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
+
+		if (((links.size > 0 || message.content.toLowerCase().includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
 			const msgcntnt = message.content.toLowerCase()
-			if 
-			(
-				(
-					(
-						msgcntnt.includes('nitro') 
-						&& 
-						(
-							msgcntnt.includes('free') 
-							||
-							msgcntnt.includes('airdrop')
-							|| 
-							msgcntnt.includes('giveaway')
-						)
-					) 
-					|| 
-					(msgcntnt.includes(":)") && msgcntnt.includes("first"))
-				)
-				||
-				(
-					msgcntnt.includes('friend') && msgcntnt.includes('server')
-				)
+			if (
+				(msgcntnt.includes('nitro') && (msgcntnt.includes('free') || msgcntnt.includes('airdrop') || msgcntnt.includes('giveaway'))) ||
+				(msgcntnt.includes(':)') && msgcntnt.includes('first')) ||
+				(msgcntnt.includes('friend') && msgcntnt.includes('server'))
 			) {
 				await message.delete()
 				if (msgcntnt.includes('@everyone')) {
 					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + msgcntnt })
 				}
-				((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny \n${msgcntnt}`)
+				;((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny \n${msgcntnt}`)
 			}
 		}
 		//console.log(ban)

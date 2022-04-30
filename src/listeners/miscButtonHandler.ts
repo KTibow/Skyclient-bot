@@ -17,8 +17,7 @@ export default class extends BotListener {
 				return await interaction.message.delete()
 			} else if (interaction.member.permissions.has('MANAGE_MESSAGES')) {
 				return await interaction.message.delete()
-			}
-			else {
+			} else {
 				return await interaction.deferUpdate()
 			}
 		}

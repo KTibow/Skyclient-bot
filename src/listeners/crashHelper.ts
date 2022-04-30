@@ -1,4 +1,3 @@
-import { match } from 'assert'
 import { Message } from 'discord.js'
 import got from 'got/dist/source'
 import { BotListener } from '../extensions/BotListener'
@@ -13,7 +12,6 @@ export default class CrashHelper extends BotListener {
 	}
 
 	async exec(message: Message) {
-
 		const allowedGuilds = ['780181693100982273', '925260329229901834', '830722593996013588']
 		if (!allowedGuilds.includes(message.guild.id)) return
 
@@ -24,109 +22,89 @@ export default class CrashHelper extends BotListener {
 				return // await message.reply(`${url} isn't, and can't be, a crash log.`)
 			}
 
-
 			const log = (await got.get(url)).body
+
 			const isLog = this.checkPossibleLog(log)
-
-			if (isLog === false) return // await message.reply('not a log')
-
-			const pathindicator = "`"
-			const gameroot = ".minecraft"
-			let profileroot = ".minecraft"
-			if (message.guildId == "780181693100982273") {
-				profileroot = ".minecraft/skyclient"
-			}
-
+			if (isLog === false) continue
 
 			const logUrl = await utils.haste(log)
-
 			if (logUrl != 'Unable to post') {
 				//await message.delete()
 				// hell no
 			}
-			const thejson = await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')
-			const fixes = await JSON.parse(thejson.body).fixes
-			const fixTypes = await JSON.parse(thejson.body).fixtypes
-			const defaultFixType = await JSON.parse(thejson.body).default_fix_type
 
-			let fixesMap = new Map<number, Array<string>>()
-
-			for (const fix of fixes) {
-				let completedProblems = true
-
-				for (const p of fix.causes) {
-					if (p.method === 'contains') {
-						if (!log.includes(p.value)) {
-							completedProblems = false
-							break
-						}
-					}
-					else if (p.method === 'contains_not') {
-						if (log.includes(p.value)) {
-							completedProblems = false
-							break
-						}
-					}
-					else if (p.method === 'regex') {
-						const regex = RegExp(p.value, "gi")
-						if (!regex.test(log)) {
-							completedProblems = false
-							break
-						}
-					}
-					else if (p.method === 'regex_not') {
-						const regex = RegExp(p.value, "gi")
-						if (regex.test(log)) {
-							completedProblems = false
-							break
-						}
-					}
-					else {
-						completedProblems = false
-						break
-					}
-				}
-
-				// this code is basically saying that all causes were contained and therefore it should be outputed
-				if (completedProblems) {
-					const fixtypenumber = this.getFixTypeNumber(defaultFixType, fix)
-					if (typeof (fixesMap.get(fixtypenumber)) == "undefined") {
-						fixesMap.set(fixtypenumber, new Array<string>())
-					}
-					fixesMap.get(fixtypenumber).push(fix.fix)
-				}
-			}
-
-			// supposedly sorts the map
-			// https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
-			fixesMap = new Map([...fixesMap.entries()].sort());
-
-			let solutions = ''
-			fixesMap.forEach((value: Array<string>, key: number) => {
-				solutions += "\n**" + this.getFixTypeString(fixTypes, defaultFixType, key) + "**\n"
-				for (const solution of value) {
-					solutions += solution.replaceAll("%pathindicator%", pathindicator).replaceAll("%gameroot%", gameroot).replaceAll("%profileroot%", profileroot) + "\n"
-				}
-			});
+			const solutions = this.calculateSolutions(log, message.guildId == '780181693100982273')
 			const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
-			await message.channel.send({content: msgtxt, allowedMentions: {users: [message.author.id]}})
+			await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
 		}
 	}
 
-	getFixTypeString(fixtypes, defaultfixtype, fix): string {
-		return fixtypes[this.getFixTypeNumber(defaultfixtype, fix)].name
+	async calculateSolutions(log: string, isSkyclient: boolean): Promise<string> {
+		const crashesResp = await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')
+		const crashes = JSON.parse(crashesResp.body)
+		const fixList = crashes.fixes
+		const fixTypes = crashes.fixtypes
+		const defaultFixType = crashes.default_fix_type
+
+		let fixesMap = new Map<number, Array<string>>()
+
+		for (const fix of fixList) {
+			const fixIsEligible = fix.causes.every((cause) => {
+				switch (cause.method) {
+					case 'contains':
+						return log.includes(cause.value)
+					case 'contains_not':
+						return !log.includes(cause.value)
+					case 'regex':
+						return new RegExp(cause.value, 'gi').test(log)
+					case 'regex_not':
+						return !new RegExp(cause.value, 'gi').test(log)
+					default:
+						return false
+				}
+			})
+
+			if (fixIsEligible) {
+				const fixTypeID = this.getFixTypeID(defaultFixType, fix)
+				if (typeof fixesMap.get(fixTypeID) == 'undefined') {
+					fixesMap.set(fixTypeID, new Array<string>())
+				}
+				fixesMap.get(fixTypeID).push(fix.fix)
+			}
+		}
+
+		fixesMap = new Map([...fixesMap].sort())
+		// sort fixesMap by the id (info, solution, recommendations, disconnect reason)
+		// https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
+
+		const pathIndicator = '`'
+		const gameRoot = '.minecraft'
+		let profileRoot = isSkyclient ? '.minecraft/skyclient' : '.minecraft'
+		let solutions = ''
+		fixesMap.forEach((value: Array<string>, key: number) => {
+			// Heading for the category
+			solutions += '\n**' + this.getFixTypeName(fixTypes, defaultFixType, key) + '**\n'
+			for (const solution of value) {
+				// Each solution
+				solutions += solution.replaceAll('%pathindicator%', pathIndicator).replaceAll('%gameroot%', gameRoot).replaceAll('%profileroot%', profileRoot) + '\n'
+			}
+		})
+		return solutions
 	}
-	getFixTypeNumber(defaultfixtype, fix): number {
+	getFixTypeName(fixTypes, defaultFixtype, fix): string {
+		return fixTypes[this.getFixTypeID(defaultFixtype, fix)].name
+	}
+	getFixTypeID(defaultFixType, fix): number {
 		try {
-			if (typeof (fix) == "number") {
+			if (typeof fix == 'number') {
 				return fix
 			}
-			if (typeof (fix.fixtype) == "undefined") {
-				return defaultfixtype
+			if (typeof fix.fixtype == 'undefined') {
+				return defaultFixType
 			}
 			return fix.fixtype
 		} catch (error) {
-			return defaultfixtype
+			return defaultFixType
 		}
 	}
 
@@ -135,8 +113,6 @@ export default class CrashHelper extends BotListener {
 	}
 
 	checkPossibleLog(possibleLog: string): boolean {
-		let isLog = false
-
 		const logText = [
 			'Thank you for using SkyClient',
 			'This is the output Console and will display information important to the developer!',
@@ -159,53 +135,6 @@ export default class CrashHelper extends BotListener {
 			'gg.essential',
 			'View crash report',
 		]
-
-		for (const text of logText) {
-			if (possibleLog.includes(text)) {
-				isLog = true
-			}
-		}
-
-		return isLog
+		return logText.some((text) => possibleLog.includes(text))
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

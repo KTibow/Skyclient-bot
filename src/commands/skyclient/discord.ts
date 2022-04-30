@@ -17,7 +17,7 @@ export default class discord extends BotCommand {
 				{ name: 'ephemeral', description: 'Toggle the embed showing for other people', type: 'BOOLEAN', required: false },
 			],
 			description: 'Shows info about a specific discord server in SkyClient',
-			SkyClientOnly: true
+			SkyClientOnly: true,
 		})
 	}
 

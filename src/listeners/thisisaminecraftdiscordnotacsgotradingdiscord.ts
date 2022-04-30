@@ -58,7 +58,7 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		// no i didn't?
 		// yes you did dumbass
 		
-		if ((links.size > 0 && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
+		if (((links.size > 0 || message.content.toLowerCase().includes("discord.gg/")) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
 			const msgcntnt = message.content.toLowerCase()
 			if 
 			(
@@ -66,7 +66,13 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 					(
 						msgcntnt.includes('nitro') 
 						&& 
-						(msgcntnt.includes('free') || msgcntnt.includes('airdrop'))
+						(
+							msgcntnt.includes('free') 
+							||
+							msgcntnt.includes('airdrop')
+							|| 
+							msgcntnt.includes('giveaway')
+						)
 					) 
 					|| 
 					(msgcntnt.includes(":)") && msgcntnt.includes("first"))

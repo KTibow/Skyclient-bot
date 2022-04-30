@@ -16,29 +16,38 @@ export default class CrashHelper extends BotListener {
 		if (!allowedGuilds.includes(message.guild.id)) return
 
 		if (message.author.bot) return
-		if (message.attachments.size === 0) return // await message.reply('no attachments')
-		for (const [, { url }] of message.attachments) {
-			if (!url.endsWith('.txt') && !url.endsWith('.log')) {
-				return // await message.reply(`${url} isn't, and can't be, a crash log.`)
+		if (message.attachments.size > 0) {
+			for (const [, { url }] of message.attachments) {
+				if (!url.endsWith('.txt') && !url.endsWith('.log')) {
+					return // await message.reply(`${url} isn't, and can't be, a crash log.`)
+				}
+
+				const log = (await got.get(url)).body
+				this.processLog(log, message)
 			}
-
-			const log = (await got.get(url)).body
-
-			const isLog = this.checkPossibleLog(log)
-			if (isLog === false) continue
-
-			const logUrl = await utils.haste(log)
-			if (logUrl != 'Unable to post') {
-				//await message.delete()
-				// hell no
-			}
-
-			const solutions = await this.calculateSolutions(log, message.guildId == '780181693100982273')
-			const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
-			await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
+		}
+		const hastebinRegex = /https:\/\/hst\.sh\/([a-z]*)/
+		const hastebinMatch = message.content.match(hastebinRegex)
+		if (hastebinMatch) {
+			const log = (await got.get(`https://hst.sh/raw/${hastebinMatch[1]}`)).body
+			this.processLog(log, message)
 		}
 	}
 
+	async processLog(log: string, message) {
+		const isLog = this.checkPossibleLog(log)
+		if (!isLog) return
+
+		const logUrl = await utils.haste(log)
+		if (logUrl != 'Unable to post') {
+			//await message.delete()
+			// hell no
+		}
+
+		const solutions = await this.calculateSolutions(log, message.guildId == '780181693100982273')
+		const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
+		await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
+	}
 	async calculateSolutions(log: string, isSkyclient: boolean): Promise<string> {
 		const crashesResp = await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')
 		const crashes = JSON.parse(crashesResp.body)

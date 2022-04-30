@@ -9,7 +9,7 @@ async function reply(message: Message, data: ReplyMessageOptions, forceEphemeral
 		else content = data
 
 		if (forceEphemeral && message.interaction && commandManager.userCanUseCommand(message)) {
-			let ephemeralReplyContent = {
+			const ephemeralReplyContent = {
 				...content,
 				ephemeral: true,
 			}
@@ -21,7 +21,7 @@ async function reply(message: Message, data: ReplyMessageOptions, forceEphemeral
 				if (message.channel.type == 'GUILD_TEXT') {
 					const repliedMessage = await message.channel.messages.fetch(message.reference.messageId)
 
-					let coolReplyContent = {
+					const coolReplyContent = {
 						...content,
 						allowedMentions: { repliedUser: true },
 					}
@@ -32,7 +32,7 @@ async function reply(message: Message, data: ReplyMessageOptions, forceEphemeral
 			}
 		}
 		if (!commandManager.userCanUseCommand(message) && message.interaction) {
-			let ephemeralReplyContent = {
+			const ephemeralReplyContent = {
 				...content,
 				ephemeral: true,
 			}

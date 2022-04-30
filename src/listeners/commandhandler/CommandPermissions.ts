@@ -17,10 +17,10 @@ export default class missingPermissions extends BotListener {
 		const PermsErrorEmbed = new MessageEmbed().setColor('#ff0000').setTitle('Something went wrong!')
 
 		if (type == 'user') {
-			let perm = command.userPermissions[0]
+			const perm = command.userPermissions[0]
 			PermsErrorEmbed.setDescription(`You cannot run this command, as you don't have \`${perm}\`.`)
 		} else {
-			let perm = command.clientPermissions[0]
+			const perm = command.clientPermissions[0]
 			PermsErrorEmbed.setDescription(`I don't have \`${perm}\`, which I need to have to run this command.`)
 		}
 		message.channel.send(PermsErrorEmbed)

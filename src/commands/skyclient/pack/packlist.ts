@@ -23,7 +23,7 @@ export default class packList extends BotCommand {
 		if (!args) {
 			args = { ephemeral: false }
 		}
-		let packJson = this.client.packs.packs
+		const packJson = this.client.packs.packs
 
 		const packsEmbed = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClien't packs List")
 

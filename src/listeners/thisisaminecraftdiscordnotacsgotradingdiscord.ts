@@ -57,18 +57,22 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		// no i didn't?
 		// yes you did dumbass
 
-		if (((links.size > 0 || message.content.toLowerCase().includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
-			const msgcntnt = message.content.toLowerCase()
+		const discordInviteRegex = /discord\.gg\/([0-9A-Za-z]+)/
+		const messageContent = message.content.toLowerCase()
+		if (((links.size > 0 || messageContent.includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
+			const discordCode = discordInviteRegex.test(messageContent) && messageContent.match(discordInviteRegex)[1]
 			if (
-				(msgcntnt.includes('nitro') && (msgcntnt.includes('free') || msgcntnt.includes('airdrop') || msgcntnt.includes('giveaway'))) ||
-				(msgcntnt.includes(':)') && msgcntnt.includes('first')) ||
-				(msgcntnt.includes('friend') && msgcntnt.includes('server'))
+				(messageContent.includes('nitro') && (messageContent.includes('free') || messageContent.includes('airdrop') || messageContent.includes('giveaway'))) ||
+				(messageContent.includes(':)') && messageContent.includes('first')) ||
+				(messageContent.includes('friend') && messageContent.includes('server')) ||
+				(discordCode && (await this.client.fetchInvite(discordCode)).guild.name.normalize('NFKC').toLowerCase().trim() === 'friends server')
 			) {
 				await message.delete()
-				if (msgcntnt.includes('@everyone')) {
-					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + msgcntnt })
+				if (messageContent.includes('@everyone')) {
+					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + messageContent })
 				}
-				;((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny \n${msgcntnt}`)
+				;((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny
+${discordCode}`)
 			}
 		}
 		//console.log(ban)

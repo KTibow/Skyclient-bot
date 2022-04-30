@@ -33,7 +33,7 @@ export default class CrashHelper extends BotListener {
 				// hell no
 			}
 
-			const solutions = this.calculateSolutions(log, message.guildId == '780181693100982273')
+			const solutions = await this.calculateSolutions(log, message.guildId == '780181693100982273')
 			const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
 			await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
 		}
@@ -79,7 +79,7 @@ export default class CrashHelper extends BotListener {
 
 		const pathIndicator = '`'
 		const gameRoot = '.minecraft'
-		let profileRoot = isSkyclient ? '.minecraft/skyclient' : '.minecraft'
+		const profileRoot = isSkyclient ? '.minecraft/skyclient' : '.minecraft'
 		let solutions = ''
 		fixesMap.forEach((value: Array<string>, key: number) => {
 			// Heading for the category

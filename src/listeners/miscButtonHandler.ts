@@ -28,7 +28,7 @@ export default class extends BotListener {
 			const guild = await this.client.guilds.cache.get(IDs[1])
 			const buttonRole = await guild.roles.cache.get(IDs[2])
 
-			let roleArray = []
+			const roleArray = []
 			interaction.member.roles.cache.forEach((role) => {
 				roleArray.push(role.id)
 			})

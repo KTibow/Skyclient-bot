@@ -93,7 +93,7 @@ export default class repo extends BotCommand {
 													return await msg.reply('You have changed nothing, so the command has been exited.')
 												}
 
-												let allThings = []
+												const allThings = []
 
 												modJson.forEach((nmod) => {
 													if (nmod.id === modID) {
@@ -124,7 +124,7 @@ export default class repo extends BotCommand {
 													return await msg.reply('You have changed nothing, so the command has been exited.')
 												}
 
-												let allThings = []
+												const allThings = []
 
 												modJson.forEach((nmod) => {
 													if (nmod.id === modID) {
@@ -180,7 +180,7 @@ export default class repo extends BotCommand {
 										} else {
 											await msg.reply(`${key} of ${mod.display}: **${mod[key]}**\n\nWhat would you like the new value to be?`)
 											dotThen1.once('collect', async (msg) => {
-												let allThings = []
+												const allThings = []
 
 												modJson.forEach((nmod) => {
 													if (nmod.id === modID) {

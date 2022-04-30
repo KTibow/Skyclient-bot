@@ -25,7 +25,7 @@ export default class partners extends BotCommand {
 
 		const servers = this.client.discords.discords
 
-		let embedArray = []
+		const embedArray = []
 
 		for (const server of servers) {
 			if (server.partner) {

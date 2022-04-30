@@ -63,9 +63,9 @@ async function sleep(time: number) {
 }
 
 async function dConsole(thingToLog: string, functionClient: Client) {
-	let output = thingToLog
+	const output = thingToLog
 	if (thingToLog.length > 1000) {
-		let output = await haste(thingToLog)
+		const output = await haste(thingToLog)
 	}
 
 	const consoleChannel = functionClient.channels.cache.get(`839215645715595316`) as TextChannel
@@ -74,13 +74,13 @@ async function dConsole(thingToLog: string, functionClient: Client) {
 	consoleChannel.send({ embeds: [consoleEmbed] })
 }
 
-async function getObjectDifferences(object1: object, object2: object, thingToCheck: string = `all`) {
+async function getObjectDifferences(object1: object, object2: object, thingToCheck = `all`) {
 	if (thingToCheck == `all`) {
 		//difference between the objects
-		let firstObjectKeys = Object.keys(object1)
-		let secondObjectKeys = Object.keys(object2)
+		const firstObjectKeys = Object.keys(object1)
+		const secondObjectKeys = Object.keys(object2)
 
-		let object = {}
+		const object = {}
 
 		firstObjectKeys.forEach((key) => {
 			if (secondObjectKeys.includes(key)) {
@@ -205,7 +205,7 @@ function debug(thingToLog: string) {
 }
 
 function splitArrayIntoMultiple(array: Array<object>, number: number) {
-	let outputArray = []
+	const outputArray = []
 	let fakeOutputArray
 	while (array.length > 0) {
 		fakeOutputArray = array.splice(0, number)
@@ -215,7 +215,7 @@ function splitArrayIntoMultiple(array: Array<object>, number: number) {
 }
 
 //this is stolen from javascript docs
-function getRandomInt(max: number = 10) {
+function getRandomInt(max = 10) {
 	return Math.floor(Math.random() * max)
 }
 

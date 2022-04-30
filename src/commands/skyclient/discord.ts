@@ -26,7 +26,7 @@ export default class discord extends BotCommand {
 			return message.reply("lemme just telepathically get the discord you want from you... oh wait i can't")
 		}
 
-		let discords = this.client.discords.discords
+		const discords = this.client.discords.discords
 
 		let found = false
 

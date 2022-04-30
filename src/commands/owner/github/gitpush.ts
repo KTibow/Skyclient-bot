@@ -28,13 +28,13 @@ export default class gitPush extends BotCommand {
 
 		const githubEmbed = new MessageEmbed().setTitle(`Command Output`).setColor(message.member.displayColor)
 
-		let gitAdd = await sh('git add .')
+		const gitAdd = await sh('git add .')
 		githubEmbed.addField(`\`git add .\``, `\`\`\`js\n${inspect(gitAdd)}\`\`\``)
 
-		let gitCommit = await sh(`git commit -m "${args.commitReason}"`)
+		const gitCommit = await sh(`git commit -m "${args.commitReason}"`)
 		githubEmbed.addField(`\`git commit "${args.commitReason}"\``, `\`\`\`js\n${inspect(gitCommit)}\`\`\``)
 
-		let githubPush = await sh('git push')
+		const githubPush = await sh('git push')
 		githubEmbed.addField(`\`git push\``, `\`\`\`js\n${inspect(githubPush)}\`\`\``)
 
 		await message.reply({ embeds: [githubEmbed] })

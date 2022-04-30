@@ -18,7 +18,7 @@ export default class gitPull extends BotCommand {
 	async exec(message, args) {
 		const githubEmbed = new MessageEmbed()
 
-		let pull = await sh('git reset --hard && git pull')
+		const pull = await sh('git reset --hard && git pull')
 		githubEmbed.setDescription(`\`\`\`js\n${inspect(pull)}\`\`\``)
 		if (message.member) {
 			githubEmbed.setColor(message.member.displayColor)

@@ -25,7 +25,7 @@ export default class modList extends BotCommand {
 		if (!args) {
 			args = { ephemeral: false }
 		}
-		let mods = this.client.mods.mods
+		const mods = this.client.mods.mods
 
 		const modsEmbed = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClien't Mods List")
 

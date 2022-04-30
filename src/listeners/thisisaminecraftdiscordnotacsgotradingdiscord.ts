@@ -61,11 +61,20 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		const messageContent = message.content.toLowerCase()
 		if (((links.size > 0 || messageContent.includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
 			const discordCode = discordInviteRegex.test(messageContent) && messageContent.match(discordInviteRegex)[1]
+			let guildName = ''
+			if (discordCode) {
+				try {
+					guildName = JSON.parse((await got.get(`https://discordapp.com/api/v6/invites/${discordCode}`)).body).guild.name
+					console.log('Got invite', discordCode, 'for', guildName)
+				} catch (err) {
+					console.log('Getting invite for', discordCode, 'failed:', err)
+				}
+			}
 			if (
 				(messageContent.includes('nitro') && (messageContent.includes('free') || messageContent.includes('airdrop') || messageContent.includes('giveaway'))) ||
 				(messageContent.includes(':)') && messageContent.includes('first')) ||
 				(messageContent.includes('friend') && messageContent.includes('server')) ||
-				(discordCode && (await this.client.fetchInvite(discordCode)).guild.name.normalize('NFKC').toLowerCase().trim() === 'friends server')
+				(guildName && guildName.normalize('NFKC').toLowerCase().trim() === 'friends server')
 			) {
 				await message.delete()
 				if (messageContent.includes('@everyone')) {

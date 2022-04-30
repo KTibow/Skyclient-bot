@@ -57,10 +57,11 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		// no i didn't?
 		// yes you did dumbass
 
-		const discordInviteRegex = /discord\.gg\/([0-9A-Za-z]+)/
-		const messageContent = message.content.toLowerCase()
-		if (((links.size > 0 || messageContent.includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
-			const discordCode = discordInviteRegex.test(messageContent) && messageContent.match(discordInviteRegex)[1]
+		const discordInviteRegex = /discord\.gg\/([0-9A-Za-z]+)/i
+		const msgContent = message.content
+		const msgContentLow = message.content.toLowerCase()
+		if (((links.size > 0 || msgContentLow.includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
+			const discordCode = discordInviteRegex.test(msgContent) && msgContent.match(discordInviteRegex)[1]
 			let guildName = ''
 			if (discordCode) {
 				try {
@@ -71,14 +72,14 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 				}
 			}
 			if (
-				(messageContent.includes('nitro') && (messageContent.includes('free') || messageContent.includes('airdrop') || messageContent.includes('giveaway'))) ||
-				(messageContent.includes(':)') && messageContent.includes('first')) ||
-				(messageContent.includes('friend') && messageContent.includes('server')) ||
+				(msgContentLow.includes('nitro') && (msgContentLow.includes('free') || msgContentLow.includes('airdrop') || msgContentLow.includes('giveaway'))) ||
+				(msgContentLow.includes(':)') && msgContentLow.includes('first')) ||
+				(msgContentLow.includes('friend') && msgContentLow.includes('server')) ||
 				(guildName && guildName.normalize('NFKC').toLowerCase().trim() === 'friends server')
 			) {
 				await message.delete()
-				if (messageContent.includes('@everyone')) {
-					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + messageContent })
+				if (msgContentLow.includes('@everyone')) {
+					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + msgContentLow })
 				}
 				;((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny
 ${discordCode}`)

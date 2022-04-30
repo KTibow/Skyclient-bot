@@ -82,7 +82,7 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 					await message.member.ban({ days: 1, reason: 'Auto ban, malicious link: ' + msgContentLow })
 				}
 				;((await this.client.channels.fetch('796895966414110751')) as TextChannel).send(`${message.author.tag} sent the funny
-${msgContentLow}`)
+${msgContent}`)
 			}
 		}
 		//console.log(ban)

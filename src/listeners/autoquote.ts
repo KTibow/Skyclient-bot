@@ -28,7 +28,7 @@ module.exports = class autoquote extends BotListener {
 				const channelID = mArray[mArray.length - 2]
 				const messageID = mArray[mArray.length - 1]
 
-				const guild = (this.client.guilds.cache.get(guildID)) as Guild
+				const guild = this.client.guilds.cache.get(guildID) as Guild
 				if (guild === undefined) return
 				const channel = guild.channels.cache.get(channelID)
 				if (channel === undefined) return

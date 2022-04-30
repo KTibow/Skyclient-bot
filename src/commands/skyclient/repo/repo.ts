@@ -10,7 +10,7 @@ export default class repo extends BotCommand {
 	constructor() {
 		super('repo', {
 			aliases: ['repo'],
-			SkyClientOnly: true
+			SkyClientOnly: true,
 		})
 	}
 	async exec(message) {
@@ -80,8 +80,8 @@ export default class repo extends BotCommand {
 										const newUrl = msg.content
 										let newFileName = decodeURIComponent(newUrl.split('/')[newUrl.split('/').length - 1])
 
-										await sh("curl -L " + newUrl + " --output temp/" + newFileName)
-										const newmd5 = ((await sh("md5sum temp/" + newFileName)).stdout).split(' ')[0]
+										await sh('curl -L ' + newUrl + ' --output temp/' + newFileName)
+										const newmd5 = (await sh('md5sum temp/' + newFileName)).stdout.split(' ')[0]
 
 										const notmsg = await msg.reply(
 											`Mod ${mod.display}:\nLink: ${newUrl}\nHash: ${newmd5}\nFile: ${newFileName}\nTo confirm file name, type \`done\`, else type the new file name.`
@@ -89,9 +89,7 @@ export default class repo extends BotCommand {
 
 										dotThen.once('collect', async (msg) => {
 											if (msg.content.toLowerCase() === 'done') {
-												if (newFileName === decodeURIComponent(mod2.file) &&
-													newUrl === mod2.url &&
-													mod2.hash && mod2.hash == newmd5) {
+												if (newFileName === decodeURIComponent(mod2.file) && newUrl === mod2.url && mod2.hash && mod2.hash == newmd5) {
 													return await msg.reply('You have changed nothing, so the command has been exited.')
 												}
 

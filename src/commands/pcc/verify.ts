@@ -16,7 +16,7 @@ export default class pccVerify extends BotCommand {
 			slashGuilds: ['762808525679755274'],
 		})
 	}
-	async exec(message, args: {person: User}) {
+	async exec(message, args: { person: User }) {
 		if (message.guild.id != '762808525679755274') return
 		if (!message.member.permissions.toArray().includes('MANAGE_ROLES')) {
 			return await message.reply({ content: "You can't do that!", ephemeral: true })

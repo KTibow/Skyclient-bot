@@ -7,7 +7,7 @@ export default class templateSkyclientCommand extends BotCommand {
 		super('templateSkyclientCommand', {
 			aliases: ['templateSkyclientCommand'],
 			SkyClientOnly: true,
-			ownerOnly: true
+			ownerOnly: true,
 		})
 	}
 

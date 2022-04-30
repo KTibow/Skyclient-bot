@@ -114,5 +114,5 @@ export type SkyclientDiscord = {
 	icon: string
 	nicknames?: string[]
 	mods?: string[]
-    packs?: string[]
+	packs?: string[]
 }

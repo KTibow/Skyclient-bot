@@ -22,7 +22,7 @@ export default class GeneralRenamer extends BotListener {
 	}
 
 	async exec(message: Message) {
-		const blacklist = ['suport', 'general', '@here', '@everyone', 'sex', 'cock', 'penis', 'niger', 'niga']
+		const blacklist = ['suport', 'general', '@here', '@everyone', 'sex', 'cock', 'penis', 'niger', 'niga', 'nsfw']
 		try {
 			const nospacecontent = message.content.replaceAll(' ', '')
 

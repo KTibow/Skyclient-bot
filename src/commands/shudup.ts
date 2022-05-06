@@ -4,20 +4,20 @@ import { BotCommand } from '../extensions/BotCommand'
 import utils from '../functions/utils'
 
 export default class shudup extends BotCommand {
-	constructor() {
-		super('up', {
-			aliases: ['up'],
-			description: 'shud up',
+    constructor() {
+        super('up', {
+            aliases: ['up'],
+            description: 'shud up',
             args: [
-                {id: 'duration', type: 'string'},
+                { id: 'duration', type: 'string' },
                 { id: 'person', type: 'user', match: 'restContent' }
-        ],
+            ],
             prefix: 'shut ',
-			slash: false,
-		})
-	}
-	async exec(message, args) {
-        if (message.author.id != "435443705055543306") 
+            slash: false,
+        })
+    }
+    async exec(message, args) {
+        if (message.author.id != "435443705055543306")
             return;
 
         if (args.person != null) {
@@ -35,5 +35,5 @@ export default class shudup extends BotCommand {
         else {
             await message.reply("user needs to be provided");
         }
-	}
+    }
 }

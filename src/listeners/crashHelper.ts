@@ -12,9 +12,6 @@ export default class CrashHelper extends BotListener {
 	}
 
 	async exec(message: Message) {
-		const allowedGuilds = ['780181693100982273', '925260329229901834', '830722593996013588']
-		if (!allowedGuilds.includes(message.guild.id)) return
-
 		if (message.author.bot) return
 		if (message.attachments.size > 0) {
 			for (const [, { url }] of message.attachments) {

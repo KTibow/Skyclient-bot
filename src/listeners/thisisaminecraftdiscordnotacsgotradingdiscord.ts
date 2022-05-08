@@ -56,11 +56,12 @@ export default class thisIsAMinecraftModDiscordNotACSGOTradingDiscord extends Bo
 		// nacrt wrote this little bit
 		// no i didn't?
 		// yes you did dumbass
+		// i didn't write most of it
 
 		const discordInviteRegex = /discord\.gg\/([0-9A-Za-z]+)/i
 		const msgContent = message.content
 		const msgContentLow = message.content.toLowerCase()
-		if (((links.size > 0 || msgContentLow.includes('discord.gg/')) && message.guild.id === '780181693100982273') || message.guild.id == '830722593996013588') {
+		if ((links.size > 0 || msgContentLow.includes('discord.gg/')) && message.guild.id === '780181693100982273') {
 			const discordCode = discordInviteRegex.test(msgContent) && msgContent.match(discordInviteRegex)[1]
 			let guildName = ''
 			if (discordCode) {

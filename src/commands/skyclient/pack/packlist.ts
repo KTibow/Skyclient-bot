@@ -49,10 +49,10 @@ export default class packList extends BotCommand {
 					}
 				}
 
+				count++
 				embeds[embedindex].addField(`${pack.display}`, packs, true)
 			}
 			
-			count++
 			if (count >= 24) {
 				count = 0
 				embedindex++

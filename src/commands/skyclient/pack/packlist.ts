@@ -23,9 +23,12 @@ export default class packList extends BotCommand {
 		if (!args) {
 			args = { ephemeral: false }
 		}
-		const packJson = this.client.packs.packs
 
-		const packsEmbed = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClien't packs List")
+		let count = 0
+		let embedindex = 0
+		const packJson = this.client.packs.packs
+		const embeds = []
+		embeds[embedindex] = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClient Texturepacks List")
 
 		packJson.forEach((pack) => {
 			if (pack.display && pack.display != 'no' && pack.hidden != true) {
@@ -46,10 +49,17 @@ export default class packList extends BotCommand {
 					}
 				}
 
-				packsEmbed.addField(`${pack.display}`, packs, true)
+				embeds[embedindex].addField(`${pack.display}`, packs, true)
+			}
+			
+			count++
+			if (count >= 24) {
+				count = 0
+				embedindex++
+				embeds.push(new MessageEmbed().setColor(message.member.displayColor))
 			}
 		})
-		const embed = packsEmbed
-		await msgutils.reply(message, { embeds: [embed] }, (args.ephemeral ??= false))
+
+		await msgutils.reply(message, { embeds: embeds }, (args.ephemeral ??= false))
 	}
 }

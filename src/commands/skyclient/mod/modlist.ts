@@ -3,10 +3,8 @@ import axios from 'axios'
 import { BotCommand } from '../../../extensions/BotCommand'
 import commandManager from '../../../functions/commandManager'
 import fs from 'fs'
-
-import importUtils from '../../../functions/utils'
+import utils from '../../../functions/utils'
 import msgutils from '../../../functions/msgutils'
-const utils = importUtils
 
 export default class modList extends BotCommand {
 	constructor() {
@@ -25,9 +23,12 @@ export default class modList extends BotCommand {
 		if (!args) {
 			args = { ephemeral: false }
 		}
-		const mods = this.client.mods.mods
 
-		const modsEmbed = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClien't Mods List")
+		let count = 0
+		let embedindex = 0
+		const mods = this.client.mods.mods
+		const embeds = []
+		embeds[embedindex] = new MessageEmbed().setColor(message.member.displayColor).setTitle("SkyClient Mods List")
 
 		mods.forEach((mod) => {
 			if (mod.display && mod.display != 'no' && mod.hidden != true) {
@@ -48,11 +49,17 @@ export default class modList extends BotCommand {
 					}
 				}
 
-				modsEmbed.addField(`${mod.display}`, mods, true)
+				count++
+				embeds[embedindex].addField(`${mod.display}`, mods, true)
+			}
+			
+			if (count >= 24) {
+				count = 0
+				embedindex++
+				embeds.push(new MessageEmbed().setColor(message.member.displayColor))
 			}
 		})
 
-		const embed = modsEmbed
-		await msgutils.reply(message, { embeds: [embed] }, (args.ephemeral ??= false))
+		await msgutils.reply(message, { embeds: embeds }, (args.ephemeral ??= false))
 	}
 }

@@ -2,6 +2,7 @@ import { BotCommand } from '../extensions/BotCommand'
 import utils from '../functions/utils'
 import got from 'got/dist/source'
 import { MessageReaction } from 'discord.js'
+import fs from 'fs'
 
 export default class letmegooglethat extends BotCommand {
 	constructor() {
@@ -22,8 +23,7 @@ export default class letmegooglethat extends BotCommand {
 	}
 
 	async exec(message, args) {
-		const crashresponse = await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')
-		const fixes = JSON.parse(crashresponse.body).fixes
+		const fixes = JSON.parse(await fs.readFileSync('CrashData/crashes.json', 'utf-8'))
 		let reply = 'no crash with the name "' + args.alias + '" found'
 
 		const gameroot = '.minecraft'

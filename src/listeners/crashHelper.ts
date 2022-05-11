@@ -2,6 +2,8 @@ import { Message } from 'discord.js'
 import got from 'got/dist/source'
 import { BotListener } from '../extensions/BotListener'
 import utils from '../functions/utils'
+import fs from 'fs'
+
 
 export default class CrashHelper extends BotListener {
 	constructor() {
@@ -41,13 +43,14 @@ export default class CrashHelper extends BotListener {
 			// hell no
 		}
 
-		const solutions = await this.calculateSolutions(log, message.guildId == '780181693100982273')
+		
+		const solutions = await this.calculateSolutions(log)
 		const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
 		await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
 	}
-	async calculateSolutions(log: string, isSkyclient: boolean): Promise<string> {
-		const crashesResp = await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')
-		const crashes = JSON.parse(crashesResp.body)
+
+	async calculateSolutions(log: string): Promise<string> {
+		const crashes = JSON.parse(await fs.readFileSync('CrashData/crashes.json', 'utf-8'))
 		const fixList = crashes.fixes
 		const fixTypes = crashes.fixtypes
 		const defaultFixType = crashes.default_fix_type
@@ -79,14 +82,18 @@ export default class CrashHelper extends BotListener {
 			}
 		}
 
-		fixesMap = new Map([...fixesMap].sort())
 		// sort fixesMap by the id (info, solution, recommendations, disconnect reason)
 		// https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
+
+		const isSkyclient = log.includes(".minecraft/skyclient")
 
 		const pathIndicator = '`'
 		const gameRoot = '.minecraft'
 		const profileRoot = isSkyclient ? '.minecraft/skyclient' : '.minecraft'
+
 		let solutions = ''
+
+		fixesMap = new Map([...fixesMap].sort())
 		fixesMap.forEach((value: Array<string>, key: number) => {
 			// Heading for the category
 			solutions += '\n**' + this.getFixTypeName(fixTypes, defaultFixType, key) + '**\n'

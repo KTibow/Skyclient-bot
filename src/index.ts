@@ -10,24 +10,31 @@ const sh = promisify(exec)
 
 console.log("hey! when you see this, make it use github's api for the repo command instead of cloning the whole repo")
 
-sh('git clone https://github.com/nacrt/SkyblockClient-REPO')
+function clonerepo(longname, shortname, execute = null) {
+	sh(`git clone https://github.com/${longname}`)
 	.then(() => {
-		console.log(chalk`{blue nacrt/SkyblockClient-REPO} {red successfully cloned!}`)
+		console.log(chalk`{blue ${longname}} {red successfully cloned!}`)
 
-		//start the bot if the repo isnt there
-		client.start()
+		if (execute != undefined && execute != null) {
+			execute()
+		}
 	})
 	.catch((err) => {
-		if (err.stderr == `fatal: destination path 'SkyblockClient-REPO' already exists and is not an empty directory.\n`) {
-			console.log(chalk`{blue nacrt/SkyblockClient-REPO} {red found, so it wasn't cloned.}`)
+		if (err.stderr == `fatal: destination path '${shortname}' already exists and is not an empty directory.\n`) {
+			console.log(chalk`{blue ${longname}} {red found, so it wasn't cloned.}`)
 		}
-		console.log(chalk.red('Pulling repo'))
+		console.log(chalk.red(`Pulling ${shortname}`))
 
-		sh('cd SkyblockClient-REPO && git reset --hard && git pull')
+		sh(`cd ${shortname} && git reset --hard && git pull`)
 
-		//start the bot if the repo is there
-		client.start()
+		if (execute != undefined && execute != null) {
+			execute()
+		}
 	})
+}
+
+clonerepo("nacrt/SkyblockClient-REPO", "SkyblockClient-REPO")
+clonerepo("SkyblockClient/CrashData", "CrashData", () => client.start())
 
 export default client
 ;(async () => {

@@ -1,21 +1,44 @@
 import got from 'got/dist/source'
+import fs from 'fs'
 
 export class CrashFixesCache {
-	public fixes: { fix: string; causes: { method: string; value: string }[] }[] = []
+	public fixes: {
+		fixes: 
+		{
+			name: string; 
+			fix: string; 
+			causes: 
+			{ 
+				method: string; 
+				value: string; 
+			}[] 
+		}[];
+		fixtypes: {
+			name: string;
+			no_ingame_display: boolean;
+			server_crashes: true;
+		},
+		default_fix_type: number
+	}
+
 
 	public async fetch() {
-		const fixes = await JSON.parse((await got.get('https://raw.githubusercontent.com/SkyblockClient/CrashData/main/crashes.json')).body).fixes
+		const fixes = JSON.parse(await fs.readFileSync('CrashData/crashes.json', 'utf-8'))
 
 		this.fixes = fixes
 		return fixes
 	}
+
+	public all() {
+		return this.fixes
+	} 
 }
 
 export class ModsCache {
 	public mods: SkyclientMod[] = []
 
 	public async fetch(): Promise<SkyclientMod[]> {
-		const mods = await JSON.parse((await got.get('https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/mods.json')).body)
+		const mods = JSON.parse(await fs.readFileSync('SkyblockClient-REPO/files/mods.json', 'utf-8'))
 
 		this.mods = mods
 		return mods
@@ -28,13 +51,17 @@ export class ModsCache {
 
 		return mod
 	}
+
+	public all() {
+		return this.mods
+	} 
 }
 
 export class PacksCache {
 	public packs: SkyclientPack[] = []
 
 	public async fetch(): Promise<SkyclientPack[]> {
-		const packs = await JSON.parse((await got.get('https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/packs.json')).body)
+		const packs = JSON.parse(await fs.readFileSync('SkyblockClient-REPO/files/packs.json', 'utf-8'))
 
 		this.packs = packs
 		return packs
@@ -43,13 +70,17 @@ export class PacksCache {
 	public get(query: string): SkyclientPack | undefined {
 		return this.packs.find((p) => p.id === query || p.display === query)
 	}
+
+	public all() {
+		return this.packs
+	} 
 }
 
 export class DiscordsCache {
 	public discords: SkyclientDiscord[] = []
 
 	public async fetch(): Promise<SkyclientDiscord[]> {
-		const discords = await JSON.parse((await got.get('https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/discords.json')).body)
+		const discords = JSON.parse(await fs.readFileSync('SkyblockClient-REPO/files/discords.json', 'utf-8'))
 
 		this.discords = discords
 		return discords
@@ -58,6 +89,10 @@ export class DiscordsCache {
 	public get(query: string): SkyclientDiscord | undefined {
 		return this.discords.find((d) => d.id === query || d.fancyname === query || d.nicknames.includes(query))
 	}
+
+	public all() {
+		return this.discords
+	} 
 }
 
 export type SkyclientMod = {

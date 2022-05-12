@@ -12,6 +12,10 @@ export default class extends BotTasks {
 		})
 	}
 	async exec() {
+		await sh(`cd SkyblockClient-REPO && git reset --hard && git pull`)
+		await sh(`cd CrashData && git reset --hard && git pull`)
+
+		await this.client.fixes.fetch()
 		await this.client.mods.fetch()
 		await this.client.packs.fetch()
 		await this.client.discords.fetch()

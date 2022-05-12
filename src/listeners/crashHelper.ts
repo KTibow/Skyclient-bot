@@ -50,7 +50,7 @@ export default class CrashHelper extends BotListener {
 	}
 
 	async calculateSolutions(log: string): Promise<string> {
-		const crashes = JSON.parse(await fs.readFileSync('CrashData/crashes.json', 'utf-8'))
+		const crashes = this.client.fixes.all()
 		const fixList = crashes.fixes
 		const fixTypes = crashes.fixtypes
 		const defaultFixType = crashes.default_fix_type

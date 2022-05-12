@@ -20,6 +20,10 @@ export default class pullAutoresponse extends BotCommand {
 			'378587857796726785', //koxx12
 		]
 		if (coolPeople.includes(message.author.id)) {
+			await sh(`cd SkyblockClient-REPO && git reset --hard && git pull`)
+			await sh(`cd CrashData && git reset --hard && git pull`)
+	
+			this.client.fixes.fetch()
 			this.client.mods.fetch()
 			this.client.packs.fetch()
 			this.client.discords.fetch()

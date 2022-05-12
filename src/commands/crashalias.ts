@@ -23,7 +23,7 @@ export default class letmegooglethat extends BotCommand {
 	}
 
 	async exec(message, args) {
-		const fixes = JSON.parse(await fs.readFileSync('CrashData/crashes.json', 'utf-8'))
+		const fixes = this.client.fixes.all()
 		let reply = 'no crash with the name "' + args.alias + '" found'
 
 		const gameroot = '.minecraft'
@@ -33,9 +33,9 @@ export default class letmegooglethat extends BotCommand {
 			profileroot = '.minecraft/skyclient'
 		}
 
-		for (const fixobject of fixes) {
-			if (fixobject.name && fixobject.name == args.alias) {
-				reply = fixobject.fix.replaceAll('%pathindicator%', pathindicator).replaceAll('%gameroot%', gameroot).replaceAll('%profileroot%', profileroot)
+		for (const fix of fixes.fixes) {
+			if (fix.name && fix.name == args.alias) {
+				reply = fix.fix.replaceAll('%pathindicator%', pathindicator).replaceAll('%gameroot%', gameroot).replaceAll('%profileroot%', profileroot)
 				break
 			}
 		}

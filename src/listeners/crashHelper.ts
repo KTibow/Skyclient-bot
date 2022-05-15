@@ -34,6 +34,7 @@ export default class CrashHelper extends BotListener {
 	}
 
 	async processLog(log: string, message) {
+
 		const isLog = this.checkPossibleLog(log)
 		if (!isLog) return
 
@@ -44,12 +45,12 @@ export default class CrashHelper extends BotListener {
 		}
 
 		
-		const solutions = await this.calculateSolutions(log)
+		const solutions = await this.calculateSolutions(log, message)
 		const msgtxt = `**${message.author}** sent a log: ${logUrl}${message.content ? `,\n"${message.content}"` : ''}\n${solutions}`
 		await message.channel.send({ content: msgtxt, allowedMentions: { users: [message.author.id] } })
 	}
 
-	async calculateSolutions(log: string): Promise<string> {
+	async calculateSolutions(log: string, message): Promise<string> {
 		const crashes = this.client.fixes.all()
 		const fixList = crashes.fixes
 		const fixTypes = crashes.fixtypes
@@ -85,7 +86,7 @@ export default class CrashHelper extends BotListener {
 		// sort fixesMap by the id (info, solution, recommendations, disconnect reason)
 		// https://stackoverflow.com/questions/31158902/is-it-possible-to-sort-a-es6-map-object
 
-		const isSkyclient = log.includes(".minecraft/skyclient")
+		const isSkyclient = (log.includes(".minecraft/skyclient") || message.guild.id == "780181693100982273")
 
 		const pathIndicator = '`'
 		const gameRoot = '.minecraft'

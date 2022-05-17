@@ -77,11 +77,12 @@ export default class repo extends BotCommand {
 									await interaction.reply('What is the **direct download URL** for the new version?')
 
 									dotThen.once('collect', async (msg) => {
-										const newUrl = msg.content
+										const newUrl = msg.content.replaceAll("%28", "(").replaceAll("%29", ")").replaceAll("%20", " ")
+										const newCleanurl = newUrl.replaceAll("(", "%28").replaceAll(")", "%29").replaceAll(" ", "%20")
 										let newFileName = decodeURIComponent(newUrl.split('/')[newUrl.split('/').length - 1])
 
-										await sh('curl -L ' + newUrl + ' --output temp/' + newFileName)
-										const newmd5 = (await sh('md5sum temp/' + newFileName)).stdout.split(' ')[0]
+										await sh('curl -L ' + newCleanurl + ' --output "temp/' + newFileName + '"')
+										const newmd5 = (await sh('md5sum "temp/' + newFileName + '"')).stdout.split(' ')[0]
 
 										const notmsg = await msg.reply(
 											`Mod ${mod.display}:\nLink: ${newUrl}\nHash: ${newmd5}\nFile: ${newFileName}\nTo confirm file name, type \`done\`, else type the new file name.`

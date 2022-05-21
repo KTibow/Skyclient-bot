@@ -12,6 +12,7 @@ export default class SkyClientInhibitor extends BotInhibitor {
 	}
 
 	exec(message: Message | AkairoMessage, command: BotCommand): boolean {
+		return false
 		if (command.SkyClientOnly) {
 			return utils.SkyClientGuilds.includes(message.guild.id) ? false : true
 		} else return true

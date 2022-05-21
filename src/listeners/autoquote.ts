@@ -10,6 +10,9 @@ module.exports = class autoquote extends BotListener {
 	}
 
 	async exec(message: Message) {
+		if (message.guild.id == "947234425375166515")
+			return
+
 		try {
 			if (message.author.bot) return
 

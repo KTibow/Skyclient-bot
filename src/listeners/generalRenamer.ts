@@ -30,6 +30,8 @@ export default class GeneralRenamer extends BotListener {
 				if (nospacecontent.length >= 7 || nospacecontent.length <= 1) return
 			} else if (message.channel.id == '887818760126345246') {
 				if (nospacecontent.length >= 15 || nospacecontent.length <= 5) return
+			} else if (message.channel.id == '977969071758925964') {
+				if (nospacecontent.length >= 120 || nospacecontent.length <= 15) return
 			} else {
 				return
 			}

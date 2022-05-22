@@ -30,7 +30,7 @@ export default class modInfo extends BotCommand {
 
 		const modEmbed = new MessageEmbed().setTitle(mod.display).setDescription(mod.description)
 		if (mod.command) modEmbed.addField('Command', mod.command)
-		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file}](${mod.url})`)
+		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file.replace("_", "\\_")}](${mod.url})`)
 		else if (!mod.url && mod.id != 'optifine')
 			modEmbed.addField('Direct Download', `[${mod.file}](https://github.com/nacrt/SkyblockClient-REPO/blob/main/files/mods/${encodeURIComponent(mod.file)}?raw=true)`)
 

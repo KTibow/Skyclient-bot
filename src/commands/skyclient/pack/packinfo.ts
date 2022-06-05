@@ -1,12 +1,10 @@
-import { MessageEmbed } from 'discord.js'
 import axios from 'axios'
+import { MessageEmbed } from 'discord.js'
 import { BotCommand } from '../../../extensions/BotCommand'
 import commandManager from '../../../functions/commandManager'
 import fs from 'fs'
-
-import importUtils from '../../../functions/utils'
+import utils from '../../../functions/utils'
 import msgutils from '../../../functions/msgutils'
-const utils = importUtils
 
 export default class packName extends BotCommand {
 	constructor() {
@@ -30,10 +28,13 @@ export default class packName extends BotCommand {
 
 		if (!pack) return msgutils.reply(message, { content: "I couldn't find a pack with that ID" })
 
+		const cleanfile = pack.file.replaceAll("(", "%28").replaceAll(")", "%29").replaceAll(" ", "%20")
+		const cleanurl = utils.cleanRepoItemLink(pack.url)
+
 		const packEmbed = new MessageEmbed().setTitle(pack.display).setDescription(pack.description)
-		if (pack.url && pack.id != 'optifine') packEmbed.addField('Direct Download', `[${pack.file.replace("_", "\\_")}](${pack.url})`)
+		if (pack.url && pack.id != 'optifine') packEmbed.addField('Direct Download', `[${pack.file.replace("_", "\\_")}](${cleanurl})`)
 		else if (!pack.url && pack.id != 'optifine')
-			packEmbed.addField('Direct Download', `[${pack.file}](https://github.com/nacrt/SkyblockClient-REPO/blob/main/files/packs/${encodeURIComponent(pack.file)}?raw=true)`)
+			packEmbed.addField('Direct Download', `[${pack.file}](https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/packs/${cleanfile})`)
 
 		if (message.member && message.member.displayColor) packEmbed.setColor(message.member.displayColor)
 		else if (!message.member.displayColor && message.guild.me.displayColor) packEmbed.setColor(message.guild.me.displayColor)

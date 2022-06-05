@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageEmbed, TextChannel } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 import { BotCommand } from '../../../extensions/BotCommand'
 import commandManager from '../../../functions/commandManager'
 import fs from 'fs'
@@ -28,11 +28,14 @@ export default class modInfo extends BotCommand {
 
 		if (!mod) return msgutils.reply(message, { content: "I couldn't find a mod with that ID" })
 
+		const cleanfile = mod.file.replaceAll("(", "%28").replaceAll(")", "%29").replaceAll(" ", "%20")
+		const cleanurl = utils.cleanRepoItemLink(mod.url)
+
 		const modEmbed = new MessageEmbed().setTitle(mod.display).setDescription(mod.description)
 		if (mod.command) modEmbed.addField('Command', mod.command)
-		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file.replace("_", "\\_")}](${mod.url})`)
+		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file}](${cleanurl})`)
 		else if (!mod.url && mod.id != 'optifine')
-			modEmbed.addField('Direct Download', `[${mod.file}](https://github.com/nacrt/SkyblockClient-REPO/blob/main/files/mods/${encodeURIComponent(mod.file)}?raw=true)`)
+			modEmbed.addField('Direct Download', `[${mod.file}](https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/mods/${cleanfile})`)
 
 		if (message.member && message.member.displayColor) modEmbed.setColor(message.member.displayColor)
 		else if (!message.member.displayColor && message.guild.me.displayColor) modEmbed.setColor(message.guild.me.displayColor)

@@ -14,6 +14,7 @@ interface hastebinRes {
 }
 
 const slashGuilds = ['780181693100982273', '794610828317032458']
+const noAutoquotingGuilds = ['947234425375166515', '822066990423605249']
 
 const SkyClientGuilds = [
 	`780181693100982273`, //main server
@@ -452,6 +453,7 @@ export = {
 	splitArrayIntoMultiple,
 	slashGuilds,
 	SkyClientGuilds,
+	noAutoquotingGuilds,
 	getRandomInt,
 	resolveMessage,
 	resolveCommand,

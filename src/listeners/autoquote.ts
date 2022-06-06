@@ -1,5 +1,6 @@
 import { BotListener } from '../extensions/BotListener'
 import { Guild, Message, TextChannel, Webhook } from 'discord.js'
+import utils from '../functions/utils'
 
 module.exports = class autoquote extends BotListener {
 	constructor() {
@@ -10,7 +11,7 @@ module.exports = class autoquote extends BotListener {
 	}
 
 	async exec(message: Message) {
-		if (message.guild.id == "947234425375166515")
+		if (utils.noAutoquotingGuilds.includes(message.guild.id))
 			return
 
 		try {

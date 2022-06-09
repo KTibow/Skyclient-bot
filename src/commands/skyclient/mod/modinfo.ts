@@ -29,11 +29,10 @@ export default class modInfo extends BotCommand {
 		if (!mod) return msgutils.reply(message, { content: "I couldn't find a mod with that ID" })
 
 		const cleanfile = mod.file.replaceAll("(", "%28").replaceAll(")", "%29").replaceAll(" ", "%20")
-		const cleanurl = utils.cleanRepoItemLink(mod.url)
-
 		const modEmbed = new MessageEmbed().setTitle(mod.display).setDescription(mod.description)
+		
 		if (mod.command) modEmbed.addField('Command', mod.command)
-		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file}](${cleanurl})`)
+		if (mod.url) modEmbed.addField('Direct Download', `[${mod.file}](${utils.cleanRepoItemLink(mod.url)})`)
 		else if (!mod.url && mod.id != 'optifine')
 			modEmbed.addField('Direct Download', `[${mod.file}](https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/mods/${cleanfile})`)
 

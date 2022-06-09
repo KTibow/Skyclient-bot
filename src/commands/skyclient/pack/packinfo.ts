@@ -29,10 +29,9 @@ export default class packName extends BotCommand {
 		if (!pack) return msgutils.reply(message, { content: "I couldn't find a pack with that ID" })
 
 		const cleanfile = pack.file.replaceAll("(", "%28").replaceAll(")", "%29").replaceAll(" ", "%20")
-		const cleanurl = utils.cleanRepoItemLink(pack.url)
-
 		const packEmbed = new MessageEmbed().setTitle(pack.display).setDescription(pack.description)
-		if (pack.url && pack.id != 'optifine') packEmbed.addField('Direct Download', `[${pack.file.replace("_", "\\_")}](${cleanurl})`)
+		
+		if (pack.url && pack.id != 'optifine') packEmbed.addField('Direct Download', `[${pack.file.replace("_", "\\_")}](${utils.cleanRepoItemLink(pack.url)})`)
 		else if (!pack.url && pack.id != 'optifine')
 			packEmbed.addField('Direct Download', `[${pack.file}](https://raw.githubusercontent.com/nacrt/SkyblockClient-REPO/main/files/packs/${cleanfile})`)
 

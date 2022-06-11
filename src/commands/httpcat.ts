@@ -21,7 +21,10 @@ export default class httpcat extends BotCommand {
 	}
 
 	async exec(message, args) {
-		const caterror = `https://http.cat/${args.caterror}`
+                const caterror = `https://http.cat/${args.caterror}`
+		if (args.caterror == null) {
+                        caterror = `here's the github repo for httpcat: https://github.com/httpcats/http.cat`
+                }
 
 		if (message.type == 'REPLY') {
 			if (message.channel.type == 'GUILD_TEXT') {

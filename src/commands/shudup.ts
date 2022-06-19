@@ -25,8 +25,11 @@ export default class shudup extends BotCommand {
             console.log(args.person);
             const badguy = await message.guild.members.fetch(args.person.id);
             let time = 1000; // ms
-            if (args.duration.includes("x")) {
-                time *= 60 * args.duration.replace('x', '');
+            if (args.duration.includes("m")) {
+                time *= 60 * args.duration.replace('m', '');
+            }
+            else if (args.duration.includes("w")) {
+                time *= 60 * 60 * 24 * 7 * args.duration.replace('w', '');
             }
             else {
                 time *= args.duration;

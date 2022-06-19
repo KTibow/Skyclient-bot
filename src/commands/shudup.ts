@@ -9,8 +9,9 @@ export default class shudup extends BotCommand {
             aliases: ['up'],
             description: 'shud up',
             args: [
-                { id: 'duration', type: 'string' },
-                { id: 'person', type: 'user', match: 'restContent' }
+                { id: 'person', type: 'user'},
+                { id: 'duration', type: 'string', match: 'restContent'}
+               
             ],
             prefix: 'shut ',
             slash: false,

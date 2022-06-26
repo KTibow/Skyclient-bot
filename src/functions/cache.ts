@@ -94,6 +94,24 @@ export class DiscordsCache {
 		return this.discords
 	} 
 }
+export class AutoResponseCache {
+	public autoresponses: SkyclientAutoResponse[] = []
+
+	public async fetch(): Promise<SkyclientDiscord[]> {
+		const autoresponses = JSON.parse(await fs.readFileSync('SkyblockClient-REPO/files/botautoresponse.json', 'utf-8'))
+
+		this.autoresponses = autoresponses
+		return autoresponses
+	}
+
+	//public get(query: string): SkyclientDiscord | undefined {
+	//	return this.autoresponses.find((d) => d.id === query || d.fancyname === query || d.nicknames.includes(query))
+	//}
+
+	public all() {
+		return this.autoresponses
+	} 
+}
 
 export type SkyclientMod = {
 	id: string
@@ -150,4 +168,10 @@ export type SkyclientDiscord = {
 	nicknames?: string[]
 	mods?: string[]
 	packs?: string[]
+}
+
+export type SkyclientAutoResponse = {
+	triggers: [][]
+	response: string
+	unclebot: boolean | false
 }

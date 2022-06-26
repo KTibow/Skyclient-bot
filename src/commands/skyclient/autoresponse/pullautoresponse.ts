@@ -27,6 +27,8 @@ export default class pullAutoresponse extends BotCommand {
 			this.client.mods.fetch()
 			this.client.packs.fetch()
 			this.client.discords.fetch()
+			this.client.autoresponses.fetch()
+			
 			await message.reply('pulled (probably)')
 		} else {
 			await message.reply('hey so you dont have the perms to run this command, if you think you deserve them ping lis or make a pr')

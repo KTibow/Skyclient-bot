@@ -2,6 +2,8 @@ import { BotListener } from '../extensions/BotListener'
 import fs from 'fs'
 import { MessageActionRow, MessageButton } from 'discord.js'
 import utils from '../functions/utils'
+import thisIsAMinecraftModDiscordNotACSGOTradingDiscord from './thisisaminecraftdiscordnotacsgotradingdiscord'
+import { SkyclientAutoResponse } from 'src/functions/cache'
 
 class notStolenFromSkytilsDiscord extends BotListener {
 	constructor() {
@@ -38,17 +40,16 @@ class notStolenFromSkytilsDiscord extends BotListener {
 			return (noAutorespond = true)
 		}
 
-		const notStolenFromSkytilsDiscordJson = JSON.parse(fs.readFileSync('SkyblockClient-REPO/files/botautoresponse.json', 'utf8'))
-
+		
 		const row = new MessageActionRow().addComponents(new MessageButton().setLabel('Delete').setStyle('DANGER').setCustomId('autoresponseDeleteMessage'))
 
 		let response
 		let count = 0
-		notStolenFromSkytilsDiscordJson.forEach(async (trigger) => {
+		this.client.autoresponses.autoresponses.forEach(async (trigger) => {
 			const triggers = trigger.triggers
 			const content = message.content.toLowerCase()
 
-			if (recursiveSearch(content, triggers, 0) && noAutorespond == false) {
+			if (recursiveSearch(content, triggers, 0, trigger.unclebot) && noAutorespond == false) {
 				// prevent more than 3 responses
 				if (++count > 3) {
 					return
@@ -62,13 +63,16 @@ class notStolenFromSkytilsDiscord extends BotListener {
 	}
 }
 
-function recursiveSearch(cutContent: string, triggers: Array<Array<string>>, index: number): boolean {
+function recursiveSearch(cutContent: string, triggers: Array<Array<string>>, index: number, startswith: boolean): boolean {
 	const wordList = triggers[index]
 	let indexOf = -1
 
 	for (const word of wordList) {
 		indexOf = cutContent.indexOf(word)
 		if (indexOf != -1) {
+			if(startswith) {
+				return cutContent.startsWith(word)
+			}
 			indexOf += word.length
 			if (triggers.length == index + 1) {
 				return true
@@ -77,7 +81,7 @@ function recursiveSearch(cutContent: string, triggers: Array<Array<string>>, ind
 		}
 	}
 	if (indexOf != -1) {
-		return recursiveSearch(cutContent.substr(indexOf), triggers, index + 1)
+		return recursiveSearch(cutContent.substr(indexOf), triggers, index + 1, startswith)
 	}
 	return false
 }

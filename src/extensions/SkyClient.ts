@@ -6,7 +6,7 @@ import utils from '../functions/utils'
 import config from './config/config'
 import fs from 'fs'
 import got from 'got/dist/source'
-import { CrashFixesCache, DiscordsCache, ModsCache, PacksCache } from '../functions/cache'
+import { CrashFixesCache, DiscordsCache, ModsCache, PacksCache, AutoResponseCache } from '../functions/cache'
 
 export class BotClient extends AkairoClient {
 	public commandHandler: CommandHandler = new CommandHandler(this, {
@@ -162,4 +162,5 @@ export class BotClient extends AkairoClient {
 	public mods = new ModsCache()
 	public packs = new PacksCache()
 	public discords = new DiscordsCache()
+	public autoresponses = new AutoResponseCache()
 }

@@ -19,5 +19,6 @@ export default class extends BotTasks {
 		await this.client.mods.fetch()
 		await this.client.packs.fetch()
 		await this.client.discords.fetch()
+		this.client.autoresponses.fetch()
 	}
 }

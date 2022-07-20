@@ -49,10 +49,12 @@ export default class GeneralRenamer extends BotListener {
 			}
 			//const noping = new MessageMentions(false)
 			await (message.channel as TextChannel).setName(message.content)
-			const msgtxt = `Renaming SkyClient <#${message.channel.id}> by <@${message.author.id}> to ${message.content.replaceAll(' ', '-')} - ${message.url}`
 
-			const webhook = new WebhookClient({ url: this.client.config.misc.skyclientGeneralLoggingURL })
-			await webhook.send({ content: msgtxt, allowedMentions: { parse: [] } })
+			const msgtxt = `Renaming SkyClient <#${message.channel.id}> by <@${message.author.id}> to ${message.content.replaceAll(' ', '-')} - ${message.url}`
+			await (message.guild.channels.cache.get('934968221923168266') as TextChannel).send({
+				content: msgtxt,
+				allowedMentions: { parse: [] },
+			})
 
 			this.lastrename = new Date()
 

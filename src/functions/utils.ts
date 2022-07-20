@@ -21,26 +21,29 @@ const SkyClientGuilds = [
 ]
 
 function cleanRepoItemLink(url: string): string {
-	let joinedstring = ""
-	let joinindex = 0
-	let strips = url.split("/")
-	for(let abcpart of strips)
-	{ 
-		joinindex++
-		if (joinindex < 2)
-		{
-			joinedstring += abcpart + "/"
-		}
-		else  if (joinindex == strips.length)
-		{
-			joinedstring += encodeURIComponent(abcpart)
-		}
-		else 
-		{
-			joinedstring += encodeURIComponent(abcpart) + "/"
-		}
-	}
-	return joinedstring
+    let joinedstring = ""
+    let joinindex = 0
+    let strips = url.split("/")
+    for (let abcpart of strips) {
+        let part = abcpart
+            .replace(/\?/gi, 'PLACEHOLDERQUESTIONMARK')
+            .replace(/=/gi, 'PLACEHOLDEREQUALSSIGN');
+        let appended = ''
+        joinindex++
+        if (joinindex < 2) {
+            appended = part + "/"
+        }
+        else if (joinindex == strips.length) {
+            appended = encodeURIComponent(part)
+        }
+        else {
+            appended = encodeURIComponent(part) + "/"
+        }
+        joinedstring += appended
+            .replace(/PLACEHOLDERQUESTIONMARK/gi, '?')
+            .replace(/PLACEHOLDEREQUALSSIGN/gi, '=');
+    }
+    return joinedstring
 }
 
 //this next function is taken from bush bot (https://github.com/NotEnoughUpdates/bush-bot), the repo is private so if you get a 404 then deal with it, removed a thing from the line under these comments because it didn't seem to be doing anything

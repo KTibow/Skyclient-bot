@@ -14,7 +14,6 @@ interface hastebinRes {
 }
 
 const slashGuilds = ['780181693100982273', '794610828317032458']
-const noAutoquotingGuilds = ['947234425375166515', '822066990423605249']
 
 const SkyClientGuilds = [
 	`780181693100982273`, //main server
@@ -246,34 +245,6 @@ function getRandomInt(max = 10) {
 	return Math.floor(Math.random() * max)
 }
 
-async function resolveMessage(url: string) {
-	const parsedLink = url.split(`/`)
-
-	const msgChannel = (await client.channels.fetch(parsedLink[5])) as TextChannel
-	const msgToQuote = await msgChannel.messages.fetch(parsedLink[6])
-	const parsedLinkURL = parsedLink[2].split('.')
-
-	const quoteEmbed = new MessageEmbed().setAuthor(msgToQuote.author.tag, msgToQuote.author.displayAvatarURL()).setDescription(msgToQuote.content)
-	if (msgToQuote.attachments) {
-		let msgAttachments
-
-		msgToQuote.attachments.forEach((a) => {
-			const splitURL = a.proxyURL.split(`.`)
-
-			if (a.proxyURL) {
-				quoteEmbed.setImage(a.proxyURL)
-			}
-		})
-	}
-
-	if (parsedLinkURL.length == 3 && parsedLink[0] == 'https:' && parsedLink[1] == '' && parsedLinkURL[1] == 'discord' && parsedLinkURL[2] == 'com') {
-		return msgToQuote
-	}
-	if (parsedLinkURL.length == 2 && parsedLink[0] == 'https:' && parsedLink[1] == '' && parsedLinkURL[0] == 'discord' && parsedLinkURL[1] == 'com') {
-		return msgToQuote
-	}
-}
-
 function resolveCommand(id: string) {
 	return client.commandHandler.modules.find((cmd) => cmd.id == id)
 }
@@ -456,9 +427,7 @@ export = {
 	splitArrayIntoMultiple,
 	slashGuilds,
 	SkyClientGuilds,
-	noAutoquotingGuilds,
 	getRandomInt,
-	resolveMessage,
 	resolveCommand,
 	resolveListener,
 	funnyNumber,

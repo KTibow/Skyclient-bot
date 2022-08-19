@@ -162,6 +162,7 @@ export type SkyclientDiscord = {
 	id: string
 	code: string
 	partner: boolean | false
+	type?: string
 	fancyname: string
 	description: string
 	icon: string

@@ -23,7 +23,9 @@ export default class partners extends BotCommand {
 			return message.reply('hey you need admin for that')
 		}
 
-		const servers = this.client.discords.discords
+		const servers = this.client.discords.discords.sort((discordA, discordB) => 
+			discordA.type > discordB.type ? 1 : discordB.type > discordA.type ? -1 : 1
+		)
 
 		const embedArray = []
 

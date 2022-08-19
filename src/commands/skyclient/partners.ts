@@ -23,13 +23,15 @@ export default class partners extends BotCommand {
 			return message.reply('hey you need admin for that')
 		}
 
-		const servers = this.client.discords.discords.sort((discordA, discordB) => 
-			discordA.type > discordB.type ? 1 : discordB.type > discordA.type ? -1 : 1
-		)
+		const servers = this.client.discords.discords
+		const modsServers = servers.filter(discord => discord.type == 'mods')
+		const packsServers = servers.filter(discord => discord.type == 'packs')
+		const otherServers = servers.filter(discord => !discord.type)
+		const sortedServers = modsServers.concat(packsServers).concat(otherServers)
 
 		const embedArray = []
 
-		for (const server of servers) {
+		for (const server of sortedServers) {
 			if (server.partner) {
 				const partnerEmbed = new MessageEmbed()
 					.setTitle(server.fancyname)
